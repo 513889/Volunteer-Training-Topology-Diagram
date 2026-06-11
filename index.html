@@ -152,7 +152,7 @@ body { background: var(--bg-page); font-family: system-ui, -apple-system, sans-s
       <path class="e d-video" d="M 610 900 L 610 710" marker-end="url(#arw-vid)"/>
       <path class="e d-video" d="M 1270 900 L 1270 710" marker-end="url(#arw-vid)"/>
 
-      <path class="e d-video hide-in-net" d="M 1270 190 L 1270 280 C 1270 330, 1090 330, 1090 360 L 1090 380" marker-end="url(#arw-vid)"/>
+      <path class="e d-video d-audio hide-in-net" d="M 1270 190 L 1270 280 C 1270 330, 1090 330, 1090 360 L 1090 380" marker-end="url(#arw-vid)"/>
 
       <path class="e d-net" d="M 520 660 L 260 660" marker-end="url(#arw-net)"/>
       <path class="e d-net" d="M 260 690 L 520 690" marker-end="url(#arw-net)"/>
@@ -178,7 +178,7 @@ body { background: var(--bg-page); font-family: system-ui, -apple-system, sans-s
       <g class="n d-audio"><rect x="300" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-person" x="375" y="128" width="24" height="24"/><text class="th" x="390" y="165" text-anchor="middle">老師·首長·司儀</text></g>
       <g class="n d-audio"><rect x="520" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-person" x="595" y="128" width="24" height="24"/><text class="th" x="610" y="165" text-anchor="middle">發言者</text></g>
       <g class="n d-video"><rect x="740" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-cam" x="815" y="128" width="24" height="24"/><text class="th" x="830" y="165" text-anchor="middle">攝影機 N</text></g>
-      <g class="n d-video d-net hide-in-net"><rect x="1180" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-laptop" x="1255" y="128" width="24" height="24"/><text class="th" x="1270" y="165" text-anchor="middle">導播筆電</text></g>
+      <g class="n d-video d-audio d-net hide-in-net"><rect x="1180" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-laptop" x="1255" y="128" width="24" height="24"/><text class="th" x="1270" y="165" text-anchor="middle">導播筆電</text></g>
       <g class="n d-video"><rect x="1400" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-cam" x="1475" y="128" width="24" height="24"/><text class="th" x="1490" y="165" text-anchor="middle">前攝影</text></g>
       <g class="n d-video d-audio"><rect x="1620" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-laptop" x="1695" y="128" width="24" height="24"/><text class="th" x="1710" y="165" text-anchor="middle">老師筆電</text></g>
       <g class="n d-proj"><rect x="1840" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-proj" x="1915" y="128" width="24" height="24"/><text class="th" x="1930" y="165" text-anchor="middle">字幕會議室投影</text></g>
@@ -207,7 +207,7 @@ body { background: var(--bg-page); font-family: system-ui, -apple-system, sans-s
 <script>
 (function(){
   var svg = document.getElementById('topo');
-  var btns = [].slice.call(document.querySelectorAll('.bar button.btn')); /* 確保只觸發過濾按鈕 */
+  var btns = [].slice.call(document.querySelectorAll('.bar button.btn'));
   function setF(f){
     if(!f || svg.getAttribute('data-filter') === f){
       svg.removeAttribute('data-filter');
