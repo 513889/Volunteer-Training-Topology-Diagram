@@ -2,8 +2,8 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>台北講堂影音架構拓撲圖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>台北講堂影音架構拓撲圖 - 115年</title>
 <style>
 :root {
   --bg-page: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
@@ -13,31 +13,80 @@
   --border-btn: #cbd5e1;
   --bg-btn-hover: #f1f5f9;
   
-  /* 旗艦高對比清新色調 */
+  /* 高對比清新色調 */
   --c-audio: #10b981; /* 翡翠綠 */
   --c-video: #e11d48; /* 玫瑰紅 */
   --c-net:   #3b82f6; /* 亮麗藍 */
   --c-proj:  #f59e0b; /* 琥珀橘 */
 }
 
-body { margin: 0; padding: 30px; background: var(--bg-page); font-family: system-ui, -apple-system, sans-serif; display: flex; justify-content: center; }
-.wrap { max-width: 2300px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+/* 核心自適應滿版設定 */
+html, body { 
+  margin: 0; 
+  padding: 0; 
+  width: 100%; 
+  height: 100%; 
+  overflow: hidden; /* 防止電腦端出現無意義的卷軸 */
+}
+
+body { 
+  background: var(--bg-page); 
+  font-family: system-ui, -apple-system, sans-serif; 
+  display: flex; 
+  justify-content: center; 
+  padding: 1.5vmin; /* 邊距隨螢幕自動微調 */
+  box-sizing: border-box; 
+}
+
+.wrap { 
+  width: 100%; 
+  height: 100%; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
 
 /* 頂部過濾按鈕區 */
-.bar { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 30px; background: var(--bg-panel); padding: 18px 36px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+.bar { 
+  flex-shrink: 0; /* 確保按鈕列不會被壓縮 */
+  display: flex; 
+  flex-wrap: wrap; 
+  justify-content: center;
+  gap: 15px; 
+  margin-bottom: 1.5vmin; 
+  background: var(--bg-panel); 
+  padding: 16px 32px; 
+  border-radius: 20px; 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06); 
+  border: 1px solid #e2e8f0; 
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .btn { display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 12px; border: 1px solid var(--border-btn); background: transparent; color: var(--text-sub); font-size: 16px; font-weight: 700; cursor: pointer; user-select: none; transition: all .2s; }
 .btn:hover { background: var(--bg-btn-hover); color: var(--text-main); border-color: #94a3b8; }
 .btn[aria-pressed="true"] { background: var(--text-main); color: #ffffff; border-color: var(--text-main); box-shadow: 0 4px 12px rgba(15,23,42,0.2); }
 .sw { width: 14px; height: 14px; border-radius: 50%; flex: none; }
 
-/* SVG 主畫布 */
-#topo { background: #ffffff; border-radius: 24px; box-shadow: 0 15px 50px rgba(15,23,42,0.08); border: 1px solid #e2e8f0; max-width: 100%; height: auto; }
+/* SVG 主畫布 - 自動填滿所有剩餘空間 */
+#topo { 
+  flex-grow: 1; 
+  width: 100%; 
+  min-height: 0; 
+  background: #ffffff; 
+  border-radius: 24px; 
+  box-shadow: 0 15px 50px rgba(15,23,42,0.08); 
+  border: 1px solid #e2e8f0; 
+}
 
 /* 互動漸隱效果 */
 #topo .e, #topo .n, #topo .lbl { transition: opacity 0.35s ease; }
 #topo[data-filter] .e, #topo[data-filter] .n, #topo[data-filter] .lbl { opacity: 0.06; }
 #topo[data-filter="audio"] .d-audio, #topo[data-filter="video"] .d-video, 
 #topo[data-filter="net"] .d-net, #topo[data-filter="proj"] .d-proj { opacity: 1; }
+
+/* 網路模式下專屬隱藏指令 */
+#topo[data-filter="net"] .hide-in-net { opacity: 0.06 !important; }
 
 /* 節點樣式 */
 .n rect { fill: #ffffff; stroke-width: 3; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); filter: drop-shadow(0 6px 10px rgba(0,0,0,0.05)); }
@@ -71,6 +120,16 @@ body { margin: 0; padding: 30px; background: var(--bg-page); font-family: system
 .lbl text { font-family: monospace; font-size: 15px; font-weight: 900; text-anchor: middle; dominant-baseline: central; }
 .lbl.d-audio circle { stroke: var(--c-audio); }
 .lbl.d-audio text { fill: var(--c-audio); }
+
+/* 手機與小螢幕版自動最佳化 */
+@media (max-width: 768px) {
+  html, body { overflow: auto; }
+  body { padding: 10px; }
+  .bar { padding: 10px 16px; gap: 8px; border-radius: 14px; margin-bottom: 10px; }
+  .btn { font-size: 13px; padding: 8px 12px; gap: 6px; border-radius: 8px; }
+  .sw { width: 10px; height: 10px; }
+  #topo { border-radius: 12px; min-height: 60vh; }
+}
 </style>
 </head>
 <body>
@@ -84,11 +143,14 @@ body { margin: 0; padding: 30px; background: var(--bg-page); font-family: system
     <button class="btn" data-f="proj" aria-pressed="false"><span class="sw" style="background:var(--c-proj)"></span>投影 (Projection)</button>
   </div>
 
-  <svg id="topo" viewBox="0 0 2100 1400" role="img">
-    <title>台北講堂影音架構拓撲圖</title>
+  <svg id="topo" viewBox="0 0 2100 1400" preserveAspectRatio="xMidYMid meet" role="img">
+    <title>台北講堂影音架構拓撲圖 - 115年</title>
     
     <defs>
-      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#94a3b8" opacity="0.35"/></pattern>
+      <linearGradient id="bg-fresh" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#f4f9ff" />
+        <stop offset="100%" stop-color="#e0eff9" />
+      </linearGradient>
       
       <marker id="arw-aud" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M2 2L10 6L2 10" fill="none" stroke="var(--c-audio)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
       <marker id="arw-vid" viewBox="0 0 12 12" refX="9" refY="6" markerWidth="6.5" markerHeight="6.5" orient="auto"><path d="M2 2L10 6L2 10" fill="none" stroke="var(--c-video)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
@@ -107,14 +169,14 @@ body { margin: 0; padding: 30px; background: var(--bg-page); font-family: system
       <symbol id="ic-matrix" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2 11h20" stroke="currentColor" stroke-width="1.8"/><rect x="5" y="14" width="2.5" height="2.5" fill="currentColor"/><rect x="9" y="14" width="2.5" height="2.5" fill="currentColor"/><rect x="13" y="14" width="2.5" height="2.5" fill="currentColor"/><rect x="17" y="14" width="2.5" height="2.5" fill="currentColor"/></symbol>
     </defs>
 
-    <rect width="100%" height="100%" fill="url(#grid)" rx="24"/>
+    <rect width="100%" height="100%" fill="url(#bg-fresh)" rx="24"/>
 
     <text x="1050" y="55" text-anchor="middle" fill="var(--text-main)" style="font-size:32px; font-weight:900; letter-spacing:3px">台北講堂 · 115 年度義工講習直播</text>
     <text x="1050" y="90" text-anchor="middle" fill="var(--c-net)" style="font-size:18px; font-weight:700; letter-spacing:5px">影音拓撲圖</text>
 
     <g id="edges">
       
-      <path class="e d-audio" d="M 1710 120 L 1710 90 L 280 90 L 280 480 L 560 480 L 560 450" marker-end="url(#arw-aud)"/>
+      <path class="e d-audio" d="M 1680 190 L 1680 480 L 660 480 L 660 450" marker-end="url(#arw-aud)"/>
       
       <path class="e d-audio" d="M 390 190 L 390 280 C 390 330, 550 330, 550 360 L 550 380" marker-end="url(#arw-aud)"/>
       <path class="e d-audio" d="M 610 190 L 610 380" marker-end="url(#arw-aud)"/>
@@ -124,23 +186,29 @@ body { margin: 0; padding: 30px; background: var(--bg-page); font-family: system
       <path class="e d-audio" d="M 960 400 L 700 400" marker-end="url(#arw-aud)"/>
       <path class="e d-audio" d="M 700 430 L 960 430" marker-end="url(#arw-aud)"/>
 
-      <path class="e d-video" d="M 830 190 L 830 280 C 830 330, 1000 330, 1000 360 L 1000 380" marker-end="url(#arw-vid)"/>
-      <path class="e d-video" d="M 1270 190 L 1270 280 C 1270 330, 1100 330, 1100 360 L 1100 380" marker-end="url(#arw-vid)"/>
-      <path class="e d-video" d="M 1020 450 L 1020 900" marker-end="url(#arw-vid)"/>
+
+      <path class="e d-video" d="M 830 190 L 830 280 C 830 330, 1010 330, 1010 360 L 1010 380" marker-end="url(#arw-vid)"/>
       
-      <path class="e d-video" d="M 1710 190 L 1710 240 L 1820 240 L 1820 1020 L 1100 1020 L 1100 970" marker-end="url(#arw-vid)"/>
+      <path class="e d-video" d="M 1490 190 L 1490 280 C 1490 330, 1270 330, 1270 360 L 1270 380" marker-end="url(#arw-vid)"/>
+      <path class="e d-video" d="M 1270 450 L 1270 640" marker-end="url(#arw-vid)"/>
+      
+      <path class="e d-video" d="M 1050 450 L 1050 900" marker-end="url(#arw-vid)"/>
+      
+      <path class="e d-video" d="M 1740 190 L 1740 220 L 1820 220 L 1820 870 L 1090 870 L 1090 900" marker-end="url(#arw-vid)"/>
       
       <path class="e d-video" d="M 960 935 L 700 935" marker-end="url(#arw-vid)"/>
       <path class="e d-video" d="M 1140 935 L 1180 935" marker-end="url(#arw-vid)"/>
       <path class="e d-video" d="M 610 900 L 610 710" marker-end="url(#arw-vid)"/>
       <path class="e d-video" d="M 1270 900 L 1270 710" marker-end="url(#arw-vid)"/>
 
-      <path class="e d-net" d="M 1490 190 L 1490 415 L 1140 415" marker-end="url(#arw-net)"/>
+
+      <path class="e d-video hide-in-net" d="M 1270 190 L 1270 280 C 1270 330, 1090 330, 1090 360 L 1090 380" marker-end="url(#arw-vid)"/>
 
       <path class="e d-net" d="M 520 660 L 260 660" marker-end="url(#arw-net)"/>
       <path class="e d-net" d="M 260 690 L 520 690" marker-end="url(#arw-net)"/>
       <path class="e d-net" d="M 1360 660 L 1620 660" marker-end="url(#arw-net)"/>
       <path class="e d-net" d="M 1620 690 L 1360 690" marker-end="url(#arw-net)"/>
+
 
       <path class="e d-proj" d="M 1050 970 L 1050 1160" marker-end="url(#arw-proj)"/>
       <path class="e d-proj" d="M 980 970 L 980 1060 L 40 1060 L 40 155 L 80 155" marker-end="url(#arw-proj)"/>
@@ -152,7 +220,7 @@ body { margin: 0; padding: 30px; background: var(--bg-page); font-family: system
       <g class="lbl d-audio"><circle cx="470" cy="330" r="14"/><text x="470" y="330">A</text></g>
       <g class="lbl d-audio"><circle cx="610" cy="285" r="14"/><text x="610" y="285">B</text></g>
       <g class="lbl d-audio"><circle cx="830" cy="400" r="14"/><text x="830" y="400">C</text></g>
-      <g class="lbl d-audio"><circle cx="420" cy="480" r="14"/><text x="420" y="480">D</text></g>
+      <g class="lbl d-audio"><circle cx="1550" cy="480" r="14"/><text x="1550" y="480">D</text></g>
       <g class="lbl d-audio"><circle cx="830" cy="430" r="14"/><text x="830" y="430">E</text></g>
       <g class="lbl d-audio"><circle cx="610" cy="545" r="14"/><text x="610" y="545">F</text></g>
     </g>
@@ -163,14 +231,16 @@ body { margin: 0; padding: 30px; background: var(--bg-page); font-family: system
       <g class="n d-audio"><rect x="300" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-person" x="375" y="128" width="24" height="24"/><text class="th" x="390" y="165" text-anchor="middle">老師·首長·司儀</text></g>
       <g class="n d-audio"><rect x="520" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-person" x="595" y="128" width="24" height="24"/><text class="th" x="610" y="165" text-anchor="middle">發言者</text></g>
       <g class="n d-video"><rect x="740" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-cam" x="815" y="128" width="24" height="24"/><text class="th" x="830" y="165" text-anchor="middle">攝影機 N</text></g>
-      <g class="n d-video"><rect x="1180" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-cam" x="1255" y="128" width="24" height="24"/><text class="th" x="1270" y="165" text-anchor="middle">前攝影</text></g>
-      <g class="n d-net"><rect x="1400" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-laptop" x="1475" y="128" width="24" height="24"/><text class="th" x="1490" y="165" text-anchor="middle">導播筆電</text></g>
+      <g class="n d-video d-net hide-in-net"><rect x="1180" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-laptop" x="1255" y="128" width="24" height="24"/><text class="th" x="1270" y="165" text-anchor="middle">導播筆電</text></g>
+      <g class="n d-video"><rect x="1400" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-cam" x="1475" y="128" width="24" height="24"/><text class="th" x="1490" y="165" text-anchor="middle">前攝影</text></g>
       <g class="n d-video d-audio"><rect x="1620" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-laptop" x="1695" y="128" width="24" height="24"/><text class="th" x="1710" y="165" text-anchor="middle">老師筆電</text></g>
       <g class="n d-proj"><rect x="1840" y="120" width="180" height="70" rx="12"/><use class="ic" href="#ic-proj" x="1915" y="128" width="24" height="24"/><text class="th" x="1930" y="165" text-anchor="middle">字幕會議室投影</text></g>
 
       <g class="n d-audio"><rect x="300" y="380" width="180" height="70" rx="12"/><use class="ic" href="#ic-speaker" x="375" y="388" width="24" height="24"/><text class="th" x="390" y="425" text-anchor="middle">播音系統</text></g>
       <g class="n d-audio"><rect x="520" y="380" width="180" height="70" rx="12"/><use class="ic" href="#ic-mixer" x="595" y="388" width="24" height="24"/><text class="th" x="610" y="418" text-anchor="middle">混音器</text><text class="ts" x="610" y="438" text-anchor="middle">Mixer</text></g>
-      <g class="n d-video d-audio d-net"><rect x="960" y="380" width="180" height="70" rx="12"/><use class="ic" href="#ic-switcher" x="1035" y="388" width="24" height="24"/><text class="th" x="1050" y="418" text-anchor="middle">導播機</text><text class="ts" x="1050" y="438" text-anchor="middle">Switcher</text></g>
+      <g class="n d-video d-audio d-net hide-in-net"><rect x="960" y="380" width="180" height="70" rx="12"/><use class="ic" href="#ic-switcher" x="1035" y="388" width="24" height="24"/><text class="th" x="1050" y="418" text-anchor="middle">導播機</text><text class="ts" x="1050" y="438" text-anchor="middle">Switcher</text></g>
+      
+      <g class="n d-video"><rect x="1180" y="380" width="180" height="70" rx="12"/><use class="ic" href="#ic-capture" x="1255" y="388" width="24" height="24"/><text class="th" x="1270" y="418" text-anchor="middle">截取卡</text><text class="ts" x="1270" y="438" text-anchor="middle">前攝影</text></g>
 
       <g class="n d-net"><rect x="80" y="640" width="180" height="70" rx="12"/><use class="ic" href="#ic-meet" x="155" y="648" width="24" height="24"/><text class="th" x="170" y="678" text-anchor="middle">影像會議室</text><text class="ts" x="170" y="698" text-anchor="middle">Google Meet</text></g>
       <g class="n d-net d-video d-audio"><rect x="520" y="640" width="180" height="70" rx="12"/><use class="ic" href="#ic-laptop" x="595" y="648" width="24" height="24"/><text class="th" x="610" y="685" text-anchor="middle">影像會議室電腦</text></g>
